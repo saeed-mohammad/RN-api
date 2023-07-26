@@ -1,15 +1,15 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
-import Cart from '../components/Cart'
+import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import Cart from '../components/Cart';
 
 const NewsScreen = () => {
   return (
-    <View>
-        <Cart/>
+    <View style={{backgroundColor: 'pink'}}>
+      <Cart />
     </View>
-  )
-}
+  );
+};
 
-export default NewsScreen
+export default NewsScreen;
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
