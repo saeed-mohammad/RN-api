@@ -1,14 +1,17 @@
 import {  StyleSheet, Text, View,FlatList, ActivityIndicator, TouchableOpacity, ScrollView } from 'react-native'
 import React,{useState,useEffect} from 'react'
 import TeamList from '../components/TeamList'
+import Inning from '../components/Innings/Inning'
 
 const TeamScreen = () => {
+    const [MyData,setMyData]=useState(null)
     const [MyTeam,setMyTeam]=useState(null)
     const [MyPlayers,setMyPlayers]=useState([])
     const [MyPlayers2,setMyPlayers2]=useState([])
     const [isData, setisData] = useState(false)
     const [teamName,setTeamName]=useState('')
     const [Btn,setBtn]=useState(MyPlayers)
+
     useEffect(()=>{
       if(MyTeam ==null){
         fetchingTeam()
@@ -24,6 +27,7 @@ const TeamScreen = () => {
             let playerVal= Object.values(teamVal[0].Players)
             let playerVal2= Object.values(teamVal[1].Players)
           
+            setMyData(data)
             setMyTeam(teamVal)
             setMyPlayers(playerVal)
             setMyPlayers2(playerVal2)
@@ -32,16 +36,19 @@ const TeamScreen = () => {
             console.log('Error Message:',error)
           }
         }
+        // console.log(MyData)
         const handleBtn=(e)=>{
           if(e == 'b1'){
             setTeamName(`Team: ${MyTeam[0].Name_Full}`)
             setBtn(MyPlayers)
-          }else{
+          }else if(e == 'b2'){
             setTeamName(`Team: ${MyTeam[1].Name_Full}`)
             setBtn(MyPlayers2)
+          }else{
+            setBtn(e)
           }
         }
-  return((!isData) ? <ActivityIndicator/>:
+  return((!isData) ? <ActivityIndicator/> :
     <View>
       <View style={styles.btnContainer}>
           <TouchableOpacity
@@ -49,31 +56,41 @@ const TeamScreen = () => {
            style={styles.btn}>
             <Text style={styles.btnTxt}>Team 1</Text>
           </TouchableOpacity>
+
           <TouchableOpacity 
           onPress={()=>handleBtn('b2')}
           style={styles.btn}>
             <Text style={styles.btnTxt}>Team 2</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity 
+          onPress={()=>handleBtn('b3')}
+          style={styles.btn}>
+            <Text style={styles.btnTxt}>Innings</Text>
+          </TouchableOpacity>
       </View>
-      {/* team 1 */}
-      {(Btn == 'b1') ? (
-         <View style={styles.team1}>
-         <Text> {teamName}</Text> 
-          <FlatList 
-           data={Btn}
-           keyExtractor={(key)=>key.Name_Full}
-           renderItem={({item})=> <TeamList item={item}/> }
-          />
-       </View>
+
+      {(Btn != 'b3')?(
+      <View style={{padding:5}}>
+        {
+        (Btn) && (
+          <View style={styles.team1}>
+          <Text> {teamName}</Text> 
+            <FlatList 
+            data={Btn}
+            keyExtractor={(key)=>key.Name_Full}
+            renderItem={({item})=> <TeamList item={item}/> }
+            />
+        </View>
+        )
+        }
+      </View>
       ):(
-      <View style={styles.team1}>
-        <Text>{teamName}</Text> 
-         <FlatList 
-          data={Btn}
-          keyExtractor={(key)=>key.Name_Full}
-          renderItem={({item})=> <TeamList item={item}/> }
-         />
-      </View>
+      <View style={{padding:5}}>
+        <Inning data={MyData}/>
+        {/* {(!MyData && !MyData.Innings) ?<ActivityIndicator/> :
+        } */}
+        </View>
       )}
     </View>
   )
@@ -91,28 +108,4 @@ const styles = StyleSheet.create({
     backgroundColor:'tomato',
     padding:10
   },
-  btnTxt:{},
-  // team1:{
-  //   backgroundColor:'lightblue',
-  //   paddingVertical:10,
-  //   marginBottom:10,
-  // },
-  // team2:{
-    
-  //   paddingVertical:10,
-  //   marginBottom:10,
-  //   backgroundColor:'lightgreen'
-  // },
-  // cart1:{
-  //   marginVertical:10,
-  //   marginHorizontal:5,
-  //   padding:10,
-  //   borderWidth:1
-  // },
-  // cart2:{
-  //   marginVertical:10,
-  //   marginHorizontal:5,
-  //   padding:5,
-  //   borderWidth:1
-  // }
 })
