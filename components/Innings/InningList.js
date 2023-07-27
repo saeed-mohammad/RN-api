@@ -1,9 +1,26 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 
-const InningList = ({inningData}) => {
+const InningList = ({inningData,playersName}) => {
+  useEffect(()=>{
+    players()
+  })
   // console.log('data:::', inningData.Number);
+  // console.log(playersName);
+  // console.log(inningData.Batsmen);
+  const players=()=>{
+    for(let i =0; i<inningData.Batsmen.length;i++){
+      // console.log('inning',inningData.Batsmen[i].Batsman)
 
+      for(let j=0; j<Object.keys(playersName).length;j++){
+        if(inningData.Batsmen[i].Batsman === Object.keys(playersName)[j] ){
+          inningData.Batsmen[i].Batsman = Object.values(playersName)[j]
+          // break
+        }
+        // console.log('playrer',Object.keys(playersName)[j])
+      }
+    }
+  }
   return (
     <View style={{marginVertical: 20}}>
       <View style={styles.overview}>

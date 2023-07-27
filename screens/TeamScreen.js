@@ -24,6 +24,9 @@ const TeamScreen = () => {
     if (MyTeam == null) {
       fetchingTeam();
     }
+    if(MyTeam){
+      playerNameObject()
+    }
   }, []);
   // fetching..
   const fetchingTeam = async () => {
@@ -36,7 +39,6 @@ const TeamScreen = () => {
       let teamVal = Object.values(data.Teams);
       let playerVal = Object.values(teamVal[0].Players);
       let playerVal2 = Object.values(teamVal[1].Players);
-
       setMyData(data);
       setMyTeam(teamVal);
       setMyPlayers(playerVal);
@@ -46,7 +48,23 @@ const TeamScreen = () => {
       console.log('Error Message:', error);
     }
   };
+  const playerNameObject=()=>{
+    let TeamOneNames={}
+    let TeamTwoNames={}
+    if(MyTeam){
+      for(const key in MyTeam[0].Players){
+        TeamOneNames[key]=MyTeam[0].Players[key]['Name_Full']
+      }
+      for(const key in MyTeam[1].Players){
+        TeamTwoNames[key]=MyTeam[1].Players[key]['Name_Full']
+      }
+      return [TeamOneNames,TeamTwoNames]
+    }
+  }
+  const playersName=playerNameObject()
   // console.log(MyData)
+  // console.log('name',playersName)
+  // console.log('teams',MyTeam[0].Players)
   const handleBtn = e => {
     if (e == 'b1') {
       setTeamName(`Team: ${MyTeam[0].Name_Full}`);
@@ -91,7 +109,7 @@ const TeamScreen = () => {
         </View>
       ) : (
         <View style={{padding: 5}}>
-          <Inning data={MyData} />
+          <Inning data={MyData} playersName={playersName} />
           {/* {(!MyData && !MyData.Innings) ?<ActivityIndicator/> :
         } */}
         </View>

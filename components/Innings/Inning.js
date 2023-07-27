@@ -2,8 +2,9 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React, {useState} from 'react';
 import InningList from './InningList';
 
-const Inning = ({data}) => {
+const Inning = ({data,playersName}) => {
   const [list, setList] = useState('');
+  // console.log('inning',playersName)
   // console.log(data.Innings[0].AllottedOvers)
   const handleBtn = e => {
     if (e === 'first') {
@@ -25,7 +26,7 @@ const Inning = ({data}) => {
         </TouchableOpacity>
       </View>
       <View>
-        {list !== '' && <InningList inningData={data.Innings[list]} />}
+        {list !== '' && <InningList inningData={data.Innings[list]} playersName={playersName[list]} />}
       </View>
     </View>
   );
