@@ -1,8 +1,9 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
+import { Table, TableWrapper, Row, Rows, Col, Cols, Cell } from 'react-native-table-component';
 import React, { useEffect } from 'react';
 
-const InningList = ({inningData}) => {
-  
+const InningList = ({inningData,notes}) => {
+  // console.log('notes',notes)
   // console.log('data:::', inningData.Number);
   // console.log(playersName);
   // console.log(inningData.Batsmen);
@@ -14,11 +15,12 @@ const InningList = ({inningData}) => {
         <Text>Overs:{inningData.Overs}</Text>
         <Text>Runrate:{inningData.Runrate}</Text>
       </View>
-      <View>
+      {/* <View> */}
+      <Table>
         <View
           style={{
             flexDirection: 'row',
-            justifyContent: 'space-around',
+            justifyContent: 'space-between',
             marginVertical: 20,
             alignItems: 'center',
           }}>
@@ -28,7 +30,7 @@ const InningList = ({inningData}) => {
           <Text>Fours</Text>
           <Text>Sixes</Text>
         </View>
-      </View>
+      {/* </View> */}
 
       <FlatList
         data={inningData.Batsmen}
@@ -37,7 +39,7 @@ const InningList = ({inningData}) => {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'space-around',
+              justifyContent: 'space-between',
               alignItems: 'center',
             }}>
             <Text>{item.Batsman}</Text>
@@ -48,6 +50,20 @@ const InningList = ({inningData}) => {
           </View>
         )}
       />
+      </Table>
+      <View style={{marginVertical:20,paddingHorizontal:5}}>
+        <Text style={{color:'black',fontSize:20}}>Notes:</Text>
+        <FlatList
+        data={notes}
+        keyExtractor={key=>key}
+        renderItem={({item})=>
+      <View style={{marginVertical:5}}>
+        <Text>{item}</Text>
+      </View>
+
+      }
+        />
+      </View>
     </View>
   );
 };

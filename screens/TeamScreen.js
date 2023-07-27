@@ -18,7 +18,7 @@ const TeamScreen = () => {
   const [MyPlayers2, setMyPlayers2] = useState([]);
   const [isData, setisData] = useState(false);
   const [teamName, setTeamName] = useState('');
-  const [Btn, setBtn] = useState(MyPlayers);
+  const [Btn, setBtn] = useState(null);
 
   useEffect(() => {
     if (MyTeam == null) {
@@ -28,7 +28,7 @@ const TeamScreen = () => {
       playerNameObject()
     }
   }, []);
-  // fetching..
+  // fetching...
   const fetchingTeam = async () => {
     try {
       const response = await fetch(
@@ -48,6 +48,7 @@ const TeamScreen = () => {
       console.log('Error Message:', error);
     }
   };
+  // sotring players name in a object
   const playerNameObject=()=>{
     let TeamOneNames={}
     let TeamTwoNames={}
@@ -62,9 +63,9 @@ const TeamScreen = () => {
     }
   }
   const playersName=playerNameObject()
-  // console.log(MyData)
-  // console.log('name',playersName)
   // console.log('teams',MyTeam[0].Players)
+  
+  // handling button events
   const handleBtn = e => {
     if (e == 'b1') {
       setTeamName(`Team: ${MyTeam[0].Name_Full}`);
@@ -72,14 +73,18 @@ const TeamScreen = () => {
     } else if (e == 'b2') {
       setTeamName(`Team: ${MyTeam[1].Name_Full}`);
       setBtn(MyPlayers2);
-    } else {
+    }
+    else {
       setBtn(e);
     }
   };
+
   return !isData ? (
     <ActivityIndicator />
   ) : (
-    <View style={{backgroundColor: 'pink'}}>
+    <ScrollView contentContainerStyle={styles.container}>
+    <View style={{flex:1}}>
+      {/* button */}
       <View style={styles.btnContainer}>
         <TouchableOpacity onPress={() => handleBtn('b1')} style={styles.btn}>
           <Text style={styles.btnTxt}>Team 1</Text>
@@ -94,9 +99,10 @@ const TeamScreen = () => {
         </TouchableOpacity>
       </View>
 
+      {/* data fetching on button event */}
       {Btn != 'b3' ? (
         <View style={{padding: 5}}>
-          {Btn && (
+          {Btn && (         
             <View style={styles.team1}>
               <Text> {teamName}</Text>
               <FlatList
@@ -104,27 +110,31 @@ const TeamScreen = () => {
                 keyExtractor={key => key.Name_Full}
                 renderItem={({item}) => <TeamList item={item} />}
               />
+
             </View>
           )}
         </View>
       ) : (
         <View style={{padding: 5}}>
           <Inning data={MyData} playersName={playersName} />
-          {/* {(!MyData && !MyData.Innings) ?<ActivityIndicator/> :
-        } */}
         </View>
       )}
     </View>
+    </ScrollView>
   );
 };
 
 export default TeamScreen;
 
 const styles = StyleSheet.create({
+  container:{
+    backgroundColor:'pink',
+    minHeight:'100%'
+  },
   btnContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginBottom: 10,
+    marginVertical: 10,
   },
   btn: {
     backgroundColor: 'tomato',

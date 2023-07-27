@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React,{useState} from 'react'
 
 export const TeamList = ({item}) => {
